@@ -82,7 +82,6 @@ def get_nearest_continent_city(source_city_data, continents_sequence):
 def pick_last_city_continent(fifth_continent_city, first_continent_city, continents_sequence):
     fifth_city_continent_id = fifth_continent_city["contId"]
     fifth_city_location = fifth_continent_city["location"]
-    first_city_continent_id = first_continent_city["contId"]
     first_city_location = first_continent_city["location"]
     continents_traversed = set(fifth_city_continent_id)
     shortest_distance_from_fifth_to_first_city = math.inf
@@ -110,9 +109,6 @@ class CityNode:
 
 
 def get_shortest_travel_continents_sequence(source_city_data):
-    source_city_continent_id = source_city_data["contId"]
-    source_city_location = source_city_data["location"]
-    # continents_sequence = [source_city_continent_id]
     current_city_data = source_city_data
     continents_sequence = {}
     city_sequence = CityNode(source_city_data).__dict__
@@ -131,31 +127,14 @@ def get_shortest_travel_continents_sequence(source_city_data):
 
 @app.route("/travel/plan", methods=['GET'])
 def get_shortest_distance():
-    print("ARGUMENTS", request.args)
-    
     source_city_id = request.args.get("city_id")
     source_city_data = cities_data[source_city_id]
     if not source_city_data:
         raise Exception("Enter correct city ID")
-    # continent_to_distance_from_current_city_map = {
-    #     source_city_continent_id: 0
-    # }
-    shortest_continents_travel_sequence, city_sequence = get_shortest_travel_continents_sequence(
-        source_city_data)
-    print(shortest_continents_travel_sequence)
     city_sequence_response = json.loads(json.dumps(city_sequence))
     city_sequence_response = flask.jsonify(city_sequence_response)
     city_sequence_response.headers.add('Access-Control-Allow-Origin', '*')
     return city_sequence_response
 
-
-print(len({"a": 1, "b": 2, "c": 3}))
-print("a" in {"a": 1})
-# get_shortest_distance("BOM")
-
-
-
-# Improvements that can be done in the solution:
-# To find the next shortest distance city, find the 
 
 app.run()
